@@ -25,25 +25,34 @@ class Player(GameSprite):
     def update(self):
         keys_pressed = pygame.key.get_pressed()
 
-        if keys_pressed[pygame.K_DOWN] and self.rect.y <500 - 210:
+        if keys_pressed[pygame.K_DOWN]:
             self.rect.y += self.speed
 
-        if keys_pressed[pygame.K_UP] and self.rect.y > 10:
+        if keys_pressed[pygame.K_UP]:
             self.rect.y -= self.speed
 
     def update_2(self):
         keys_pressed = pygame.key.get_pressed()
 
-        if keys_pressed[pygame.K_s] and self.rect.y <500 - 110:
+        if keys_pressed[pygame.K_s]:
             self.rect.y += self.speed
 
-        if keys_pressed[pygame.K_w] and self.rect.y > 10:
+        if keys_pressed[pygame.K_w]:
             self.rect.y -= self.speed
+
+dir_x = -3
+dir_y = 3
+
+class Ball(GameSprite):
+    def move(self):
+        self.rect.x += dir_x
+        self.rect.y += dir_y
+
 
 racket1 = Player('racket.png', 5, 10, 10, racket_size)
 racket2 = Player('racket.png', 5, 620, 10, racket_size)
 
-ball = GameSprite('ball.png', 7, 350, 250, ball_size)
+ball = Ball('ball.png', 7, 350, 250, ball_size)
 FPS = 60
 game = True
 clock = pygame.time.Clock()
@@ -51,14 +60,26 @@ while game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
- 
-        window.fill(light_blue)
-        racket1.reset(window)
-        racket1.update()
-        racket2.reset(window)
-        racket2.update_2()
-        ball.reset(window)
+    
+    if ball.rect.y > 500 - ball_size[1]:
+        dir_y *= -1
 
+    if ball.rect.y < 0:
+        dir_y *= -1
+
+    if pygame.sprite.collide_rect(ball, racket2):
+        dir_x *= -1
+
+    if pygame.sprite.collide_rect(ball, racket1):
+        dir_x *= -1
+
+    window.fill(light_blue)
+    racket1.reset(window)
+    racket1.update()
+    racket2.reset(window)
+    racket2.update_2()
+    ball.reset(window)
+    ball.move()
     pygame.display.update()
     clock.tick(FPS)
 
