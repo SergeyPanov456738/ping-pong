@@ -52,10 +52,10 @@ white = (255,255,255)
 
 font = pygame.font.Font(None, 60)
 
-racket1 = Player('racket.png', 5, 10, 10, racket_size)
-racket2 = Player('racket.png', 5, 620, 10, racket_size)
+racket1 = Player('./images/racket.png', 5, 10, 10, racket_size)
+racket2 = Player('./images/racket.png', 5, 620, 10, racket_size)
 
-ball = Ball('ball.png', 7, 350, 250, ball_size)
+ball = Ball('./images/ball.png', 7, 350, 250, ball_size)
 FPS = 60
 game = True
 game_over = False
