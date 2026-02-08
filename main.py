@@ -1,8 +1,7 @@
 import pygame
-
+pygame.init()
 window = pygame.display.set_mode((700, 500))
 pygame.display.set_caption('Пинг - понг')
-#pygame.display.set_icon()
 
 light_blue = (66, 215, 245)
 window.fill(light_blue)
@@ -49,37 +48,53 @@ class Ball(GameSprite):
         self.rect.y += dir_y
 
 
+white = (255,255,255)
+
+font = pygame.font.Font(None, 60)
+
 racket1 = Player('racket.png', 5, 10, 10, racket_size)
 racket2 = Player('racket.png', 5, 620, 10, racket_size)
 
 ball = Ball('ball.png', 7, 350, 250, ball_size)
 FPS = 60
 game = True
+game_over = False
 clock = pygame.time.Clock()
 while game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
-    
-    if ball.rect.y > 500 - ball_size[1]:
-        dir_y *= -1
+    if not game_over:
+        if ball.rect.y > 500 - ball_size[1]:
+            dir_y *= -1
 
-    if ball.rect.y < 0:
-        dir_y *= -1
+        if ball.rect.y < 0:
+            dir_y *= -1
 
-    if pygame.sprite.collide_rect(ball, racket2):
-        dir_x *= -1
+        if pygame.sprite.collide_rect(ball, racket2):
+            dir_x *= -1
 
-    if pygame.sprite.collide_rect(ball, racket1):
-        dir_x *= -1
+        if pygame.sprite.collide_rect(ball, racket1):
+            dir_x *= -1
 
-    window.fill(light_blue)
-    racket1.reset(window)
-    racket1.update()
-    racket2.reset(window)
-    racket2.update_2()
-    ball.reset(window)
-    ball.move()
+        window.fill(light_blue)
+        racket1.reset(window)
+        racket1.update()
+        racket2.reset(window)
+        racket2.update_2()
+        ball.reset(window)
+        ball.move()
+
+        if ball.rect.x > 700:
+            text_win = font.render('player left win', True, white)
+            window.blit(text_win, (300, 250))
+            game_over = True
+
+        if ball.rect.x < -65:
+            text_win = font.render('player right win', True, white)
+            window.blit(text_win, (300, 250))
+            game_over = True
+
     pygame.display.update()
     clock.tick(FPS)
 
